@@ -1,0 +1,32 @@
+<button onclick="sendEmail()" class="btn btn-primary">Send Email</button>
+<button onclick="sendSms()" class="btn btn-primary">Send SMS</button>
+
+<script>
+    function sendEmail() {
+        fetch('/sendEmail')
+            .then(response => response.json())
+            .then(data => {
+			if(data.error){
+				console.log(data)
+				alert(data.error);
+			}else{
+				//remove the checked attribute from tab 2 and insirt it into tab 1
+				alert(data.message);
+			}
+		})
+    }
+
+    function sendSms() {
+        fetch('/sendSms')
+            .then(response => response.json())
+            .then(data => {
+			if(data.error){
+				console.log(data)
+				alert(data.error);
+			}else{
+				//remove the checked attribute from tab 2 and insirt it into tab 1
+				alert(data.message);
+			}
+		})
+    }
+</script>
