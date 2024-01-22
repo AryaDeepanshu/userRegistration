@@ -7,14 +7,16 @@ dotenv.config();
 const isLoggedIn = (req: Request, res: Response, next: NextFunction) => {
     try {
         const token = req.cookies.jwt;
-        if (!token) {
-            res.status(401).json({
-                error: 'Unauthorized'
-            });
-            return;
+        if(token == null){
+            return res.status(401).redirect('/auth/login');
         }
-        const decoded = jwt.verify(token, process.env.JWT_SECRET || '');
-        res.locals.user = decoded;
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || "")
+        if(!decoded){
+            
+            return res.status(401).redirect('/auth/login');
+        }
+        
+
         next();
     }
     catch (err: any) {

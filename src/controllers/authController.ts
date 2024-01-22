@@ -61,8 +61,11 @@ const signupPostController = async (req:Request, res:Response) => {
     })
     user.save()
     .then((user)=>{
-        const token = jwt.sign({_id: user._id}, process.env.JWT_SECRET || "")
-        res.cookie('jwt', token, {httpOnly: true})
+        const access_token:string =  generateAccessToken({_id: user._id})
+        const refresh_token:string = jwt.sign({_id: user._id}, process.env.REFRESH_SECRET as string)
+        user.refreshToken = refresh_token
+        user.save()
+        res.cookie('access_token', access_token, {httpOnly: true})
         res.status(200).json({
             message: "User created successfully",
             user
@@ -74,6 +77,10 @@ const signupPostController = async (req:Request, res:Response) => {
             error: "Something went wrong"
         })
     })
+}
+
+function generateAccessToken(_id: Object): string {
+    return jwt.sign(_id, process.env.JWT_SECRET || "", { expiresIn: '15s' })
 }
 
 const loginGetController = (req:Request, res:Response) => {

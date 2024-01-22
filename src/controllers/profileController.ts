@@ -7,15 +7,7 @@ import {validatePassword, validateEmail} from '../utils/validation'
 dotenv.config()
 
 const getProfileController = (req:Request, res:Response) => {
-    //if logged in, show profile
-    console.log(req.cookies)
-    const token = req.cookies.jwt;
     
-    if (!token) {
-        res.redirect('/auth/login')
-    }
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || '');
-    res.locals.user = decoded;
     res.render('profile')
 }
 
